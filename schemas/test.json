@@ -1,0 +1,10 @@
+{
+    "properties": {
+        "id": { "$ref": "int.json#definitions/id" },
+        "name": { "$ref": "str.json#definitions/name" }
+    },
+    "required": [
+        "id",
+        "name"
+    ]
+}
