@@ -11,9 +11,24 @@ A thin wrapper over [Python Jsonschema](https://github.com/Julian/jsonschema) to
 Using `jsonschema-cli --help`
 
 ```bash
-usage: jsonschema-cli [-h] [-r, --resolver {}] schema_file_or_string data_file_or_string
+usage: jsonschema-cli [-h] {validate} ...
 
 A wrapper around https://github.com/Julian/jsonschema to validate JSON using the CLI
+
+positional arguments:
+  {validate}  Validate thet json data with a schema
+    validate  Validate
+
+optional arguments:
+  -h, --help  show this help message and exit
+```
+
+### Validate
+
+Using `jsonschema-cli validate --help`
+
+```bash
+usage: jsonschema-cli validate [-h] schema_file_or_string data_file_or_string
 
 positional arguments:
   schema_file_or_string
@@ -22,7 +37,6 @@ positional arguments:
 
 optional arguments:
   -h, --help            show this help message and exit
-  -r, --resolver {}     A list of files to load for $ref to resolve too
 ```
 
 ### Examples

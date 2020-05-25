@@ -55,7 +55,7 @@ def create_parser():
     validate_parser = parser.add_subparsers(help='Validate thet json data with a schema').add_parser('validate', help='Validate')
 
     validate_parser.add_argument(
-        "schema_file_or_string", type=str, help="The schema you want to use to validate the data",
+        "schema_file_or_string", type=str, help="The schema you want to use to validate the data against",
     )
     validate_parser.add_argument(
         "data_file_or_string", type=str, help="The data you want validated by the schema",
