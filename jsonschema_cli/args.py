@@ -52,15 +52,16 @@ def create_parser():
         description="A wrapper around https://github.com/Julian/jsonschema to validate JSON using the CLI",
     )
 
-    parser.add_argument(
+    validate_parser = parser.add_subparsers(help='Validate thet json data with a schema').add_parser('validate', help='Validate')
+
+    validate_parser.add_argument(
         "schema_file_or_string", type=str, help="The schema you want to use to validate the data",
     )
-    parser.add_argument(
+    validate_parser.add_argument(
         "data_file_or_string", type=str, help="The data you want validated by the schema",
     )
-    parser.add_argument(
-        "-r, --resolver", type=str, help="A list of files to load for $ref to resolve too", choices=[""],
-    )
+
+    validate_parser.set_defaults(func=schema_validate)
 
     return parser
 
@@ -69,7 +70,7 @@ def default_handler():
     raise NotImplementedError("Handler not defined for URI schema")
 
 
-def main(args):
+def schema_validate(args):
     path, schema = load_schema(args.schema_file_or_string)
     instance = load_instance(args.data_file_or_string)
 

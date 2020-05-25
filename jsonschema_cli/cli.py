@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
-from jsonschema_cli.main import main, create_parser
+import sys
+
 import jsonschema
+
+from jsonschema_cli.args import create_parser, JsonschemaException
 
 
 def run():
@@ -8,6 +11,7 @@ def run():
     args = parser.parse_args()
 
     try:
-        main(args)
-    except jsonschema.ValidationError as e:
+        args.func(args)
+    except (jsonschema.ValidationError, JsonschemaException) as e:
         print(e)
+        sys.exit(1)
