@@ -6,6 +6,29 @@ A thin wrapper over [Python Jsonschema](https://github.com/Julian/jsonschema) to
 
 `pip install jsonschema-cli`
 
+## Security
+
+The `$ref` resolving will automatically resolve to any path using basic `$ref` notation:
+
+```json
+{"$ref": "my-custom.json#...."}
+```
+
+That means that when using this tool, an attacker may do the following:
+
+```json
+{"$ref": "../../../../all-my-secrets.json"}
+```
+
+To make sure this doesn't happen:
+
+1. When using this tool in a backend server, make sure the file access is scoped.
+2. Don't run JSONSCHEMAS without sanitizing paths.
+3. Treat all un-knwon user input as evil.
+
+This has no actual current  affect other than loading the contets of secrets into memory of the process.
+But may lead to misfortune if not addressed.
+
 ## Usgae
 
 Using `jsonschema-cli --help`

@@ -4,7 +4,7 @@ import argparse
 import pathlib
 import os
 from jsonschema_cli.load import load_file, load_string
-from jsonschema_cli.handlers import handle_file_uri
+from jsonschema_cli.resolvers import relative_path_resolver
 import enum
 import json
 import yaml
@@ -24,7 +24,7 @@ def load_schema(schema: str) -> dict:
         if type(loaded_data) is not dict:
             raise JsonschemaException(f'Schema file must be a a map, cannot load file: "{schema}"')
     else:
-        data_path = None
+        data_path = pathlib.Path(os.getcwd()).absolute()
         loaded_data = load_string(schema)
 
         if type(loaded_data) is not dict:
@@ -66,19 +66,11 @@ def create_parser():
     return parser
 
 
-def default_handler():
-    raise NotImplementedError("Handler not defined for URI schema")
+
 
 
 def schema_validate(args):
     path, schema = load_schema(args.schema_file_or_string)
     instance = load_instance(args.data_file_or_string)
 
-    handler = default_handler
-    if path is not None:
-        handler = handle_file_uri(path)
-
-    ref_handlers = {"": handler, "file": handler}
-    resolver = jsonschema.RefResolver("", {}, handlers=ref_handlers)
-
-    jsonschema.Draft7Validator(schema, resolver=resolver).validate(instance=instance)
+    jsonschema.Draft7Validator(schema, resolver=relative_path_resolver(path)).validate(instance=instance)
