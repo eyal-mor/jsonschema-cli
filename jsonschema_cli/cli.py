@@ -3,7 +3,8 @@ import sys
 
 import jsonschema
 
-from jsonschema_cli.args import create_parser, JsonschemaException
+from jsonschema_cli.args import create_parser
+from jsonschema_cli.exceptions import JsonschemaCliException
 
 
 def run():
@@ -12,6 +13,6 @@ def run():
 
     try:
         args.func(args)
-    except (jsonschema.ValidationError, JsonschemaException) as e:
+    except (jsonschema.ValidationError, JsonschemaCliException) as e:
         print(e)
         sys.exit(1)

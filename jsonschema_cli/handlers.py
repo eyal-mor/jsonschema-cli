@@ -1,6 +1,3 @@
-"""
-
-"""
 import os
 import pathlib
 from urllib.parse import urlparse

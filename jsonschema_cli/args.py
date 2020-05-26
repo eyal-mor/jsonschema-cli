@@ -5,14 +5,10 @@ import pathlib
 import os
 from jsonschema_cli.load import load_file, load_string
 from jsonschema_cli.resolvers import relative_path_resolver
+from jsonschema_cli.exceptions import JsonschemaCliException
 import enum
 import json
 import yaml
-
-
-class JsonschemaException(Exception):
-    def __str__(self):
-        return " ".join(self.args)
 
 
 def load_schema(schema: str) -> dict:
@@ -22,13 +18,13 @@ def load_schema(schema: str) -> dict:
         loaded_data = load_file(data_path)
 
         if type(loaded_data) is not dict:
-            raise JsonschemaException(f'Schema file must be a a map, cannot load file: "{schema}"')
+            raise JsonschemaCliException(f'Schema file must be a a map, cannot load file: "{schema}"')
     else:
         data_path = pathlib.Path(os.getcwd()).absolute()
         loaded_data = load_string(schema)
 
         if type(loaded_data) is not dict:
-            raise JsonschemaException(f'JSON/YAML string must be a a map, cannot load "{schema}"')
+            raise JsonschemaCliException(f'JSON/YAML string must be a a map, cannot load "{schema}"')
 
     return data_path, loaded_data
 
@@ -41,7 +37,7 @@ def load_instance(data: str) -> dict:
     else:
         loaded_data = load_string(data)
         if not loaded_data:
-            raise JsonschemaException("Instance data cannot be empty")
+            raise JsonschemaCliException("Instance data cannot be empty")
 
     return loaded_data
 
@@ -52,7 +48,9 @@ def create_parser():
         description="A wrapper around https://github.com/Julian/jsonschema to validate JSON using the CLI",
     )
 
-    validate_parser = parser.add_subparsers(help='Validate thet json data with a schema').add_parser('validate', help='Validate')
+    validate_parser = parser.add_subparsers(help="Validate thet json data with a schema").add_parser(
+        "validate", help="Validate"
+    )
 
     validate_parser.add_argument(
         "schema_file_or_string", type=str, help="The schema you want to use to validate the data against",
@@ -64,9 +62,6 @@ def create_parser():
     validate_parser.set_defaults(func=schema_validate)
 
     return parser
-
-
-
 
 
 def schema_validate(args):
