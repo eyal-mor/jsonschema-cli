@@ -67,5 +67,8 @@ def create_parser():
 def schema_validate(args):
     path, schema = load_schema(args.schema_file_or_string)
     instance = load_instance(args.data_file_or_string)
+    resolver = relative_path_resolver(schema, base_path=path)
 
-    jsonschema.Draft7Validator(schema, resolver=relative_path_resolver(path)).validate(instance=instance)
+    jsonschema.Draft7Validator(schema, resolver=resolver).validate(instance=instance)
+
+

@@ -3,7 +3,7 @@ from jsonschema import RefResolver
 import os
 
 
-def relative_path_resolver(base_path=os.getcwd()):
-    handler = handle_file_uri(base_path)
-    ref_handlers = {"": handler}
-    return RefResolver("", {}, handlers=ref_handlers)
+def relative_path_resolver(schema, base_path=os.getcwd()):
+    handlers = {"": handle_file_uri(base_path)}
+    return RefResolver.from_schema(schema, handlers=handlers)
+
